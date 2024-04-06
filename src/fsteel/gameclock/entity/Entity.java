@@ -10,7 +10,6 @@ public class Entity implements ScreenObject{
     private float xPos;
     private float yPos;
     private Skin skin;
-    private boolean isShapeSimilarToSkin;
 
     public Entity(){
         xPos = 0;
@@ -19,7 +18,6 @@ public class Entity implements ScreenObject{
     }
 
     public Entity(Skin skin){
-        this();
         setSkin(skin);
     }
 
@@ -48,13 +46,13 @@ public class Entity implements ScreenObject{
         this.skin = skin;
     }
 
-    public Skin getSkin() {
-        return skin;
-    }
-
     @Override
     public int getXPosOnScreen() {
         return (int) xPos;
+    }
+
+    public float getCorrectXPos(){
+        return xPos;
     }
 
     @Override
@@ -62,17 +60,17 @@ public class Entity implements ScreenObject{
         return (int) yPos;
     }
 
+    public float getCorrectYPos(){
+        return yPos;
+    }
+
     @Override
     public Image getAppearance(){
         return skin.getAppearance();
     }
 
-    public float getCorrectXPos(){
-        return xPos;
-    }
-
-    public float getCorrectYPos(){
-        return yPos;
+    public Skin getSkin() {
+        return skin;
     }
 
     public boolean isOnScreen(){

@@ -4,6 +4,7 @@ import fsteel.gameclock.GameProcess;
 import fsteel.gameclock.GameProcessManager;
 import fsteel.gameclock.GameRenderingProcess;
 import fsteel.gameclock.GameTickProcess;
+import fsteel.gameclock.entity.hitBox.HitCheckProcess;
 import fsteel.gameclock.rendering.ScreenObjectRenderer;
 import fsteel.keylistening.GameKeyBinding;
 import fsteel.window.GameFrame;
@@ -14,6 +15,7 @@ public class Game {
     private static GameFrame gameFrame;
     private static ScreenObjectRenderer renderer;
     private static GameRenderingProcess renderProcess;
+    private static HitCheckProcess hitCheckProcess;
     private static GameTickProcess tickProcess;
 
     public static void startGame(){
@@ -25,6 +27,7 @@ public class Game {
     private static void startProcesses(){
         renderProcess = new GameRenderingProcess(gameFrame.getGamePane());
         tickProcess = new GameTickProcess();
+        hitCheckProcess = new HitCheckProcess();
         GameProcessManager.startGameProcesses(GameProcess.ORIGIN_GAME_START);
     }
 
@@ -46,6 +49,10 @@ public class Game {
 
     public static GameTickProcess getTickProcess(){
         return tickProcess;
+    }
+
+    public static HitCheckProcess getHitCheckProcess(){
+        return hitCheckProcess;
     }
 
     public static void addGameKeyBinding(GameKeyBinding gkb){

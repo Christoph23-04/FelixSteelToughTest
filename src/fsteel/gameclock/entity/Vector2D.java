@@ -2,6 +2,12 @@ package fsteel.gameclock.entity;
 
 public class Vector2D {
 
+    public static Vector2D calculateVectorBetween(float xPos1, float yPos1, float xPos2, float yPos2){
+        float xDiff = xPos2 - xPos1;
+        float yDiff = yPos2 - yPos1;
+        return new Vector2D(xDiff, yDiff);
+    }
+
     public static final float STANDARD_VECTOR_LENGTH = 1f;
 
     private float xDir;
@@ -10,6 +16,10 @@ public class Vector2D {
 
     public Vector2D(){
         this(0, 0);
+    }
+
+    public Vector2D(int xDir, int yDir){
+        this((float) xDir,(float) yDir);
     }
 
     public Vector2D(float xDir, float yDir){

@@ -34,7 +34,6 @@ public class ScreenObjectRenderer implements GraphicRenderer{
         }
     }
 
-
     public void addScreenObject(ScreenObject so){
         screenObjects.add(so);
     }

@@ -2,10 +2,8 @@ package fsteel.gameclock.entity;
 
 import java.awt.*;
 
-public interface ScreenObject {
+public interface ScreenObject extends ScreenPoint {
 
     public Image getAppearance();
-    public int getXPosOnScreen();
-    public int getYPosOnScreen();
 
 }

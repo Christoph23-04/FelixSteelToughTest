@@ -4,7 +4,7 @@ import fsteel.gameclock.TickAble;
 import fsteel.main.Game;
 import fsteel.main.GameSettings;
 
-public class MovableEntity extends HitAbleEntity implements TickAble {
+public class MoveAbleEntity extends Entity implements TickAble {
 
     private float totalXDiff;
     private float totalYDiff;
@@ -12,7 +12,7 @@ public class MovableEntity extends HitAbleEntity implements TickAble {
     private Vector2D moveDirection;
     private float speedPxS;
 
-    public MovableEntity(){
+    public MoveAbleEntity(){
         moveDirection = new Vector2D();
         speedPxS = 0;
         totalXDiff = 0;

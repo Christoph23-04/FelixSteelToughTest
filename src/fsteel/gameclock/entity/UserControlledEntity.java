@@ -1,8 +1,6 @@
 package fsteel.gameclock.entity;
 
-import fsteel.main.Game;
-
-public class UserControlledEntity extends MovableEntity{
+public class UserControlledEntity extends MoveAbleEntity {
 
     public UserControlledEntity(){
         super.setSpeedPxS(5);

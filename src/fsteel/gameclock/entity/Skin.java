@@ -1,5 +1,8 @@
 package fsteel.gameclock.entity;
 
+import fsteel.gameclock.entity.hitBox.HitBox;
+import fsteel.gameclock.entity.hitBox.HitBoxObject;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -20,10 +23,10 @@ public class Skin{
         this.appearance = appearance;
     }
 
-    public HitBox getHitBox(){
+    public HitBox getAptHitBox(HitBoxObject hbo){
         int skinWidth = appearance.getWidth(null);
         int skinHeight = appearance.getHeight(null);
-        return HitBox.createSquareHitbox(skinWidth, skinHeight);
+        return HitBox.createSquareHitbox(skinWidth, skinHeight, hbo);
     }
 
     public Image getAppearance(){
