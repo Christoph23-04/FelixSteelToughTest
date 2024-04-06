@@ -13,11 +13,11 @@ public class GameRenderingProcess extends GameClockProcess {
         this.renderingCanvas = renderCanvas;
     }
 
-    public synchronized void setRenderingCanvas(RenderCanvas renderingCanvas){
+    public void setRenderingCanvas(RenderCanvas renderingCanvas){
         this.renderingCanvas = renderingCanvas;
     }
 
-    public synchronized RenderCanvas getRenderingCanvas(){
+    public RenderCanvas getRenderingCanvas(){
         return renderingCanvas;
     }
 

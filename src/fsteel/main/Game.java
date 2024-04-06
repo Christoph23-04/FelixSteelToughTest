@@ -10,6 +10,9 @@ import fsteel.keylistening.GameKeyBinding;
 import fsteel.window.GameFrame;
 import fsteel.window.GamePane;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Game {
 
     private static GameFrame gameFrame;
@@ -29,6 +32,20 @@ public class Game {
         tickProcess = new GameTickProcess();
         hitCheckProcess = new HitCheckProcess();
         GameProcessManager.startGameProcesses(GameProcess.ORIGIN_GAME_START);
+        startSpecsPrint();
+    }
+
+    //TODO
+    private static void startSpecsPrint(){
+        Timer t = new Timer();
+        t.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println(renderProcess.getCalculatedTPS() + "  FPS Render Process - rendered");
+                System.out.println(tickProcess.getCalculatedTPS() + "  TPS Tick Process - ticked");
+                System.out.println(hitCheckProcess.getCalculatedTPS() + "  TPS Hit Check - ticked");
+            }
+        }, 1000, 1000);
     }
 
     public static GameFrame getGameFrame(){

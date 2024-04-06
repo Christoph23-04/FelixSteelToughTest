@@ -25,6 +25,7 @@ public class GamePane extends Canvas implements RenderCanvas {
     @Override
     public boolean renderAll() {
         try {
+            long l = System.currentTimeMillis();
             BufferStrategy bs = super.getBufferStrategy();
             Graphics2D g2d = (Graphics2D) bs.getDrawGraphics();
             renderer.renderObject(g2d);

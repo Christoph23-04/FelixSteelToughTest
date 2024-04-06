@@ -1,4 +1,4 @@
-package fsteel.gameclock.entity;
+package fsteel.gameclock.entity.skin;
 
 import fsteel.gameclock.entity.hitBox.HitBox;
 import fsteel.gameclock.entity.hitBox.HitBoxObject;

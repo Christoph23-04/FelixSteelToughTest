@@ -1,5 +1,6 @@
 package fsteel.gameclock.entity;
 
+import fsteel.gameclock.entity.skin.Skin;
 import fsteel.main.Game;
 
 import java.awt.*;

@@ -29,9 +29,10 @@ public class ScreenObjectRenderer implements GraphicRenderer{
         for(ScreenObject so : screenObjects){
             if(so != null && so.getAppearance() != null){
                 sprite.drawObject(so.getAppearance(), so.getXPosOnScreen(), so.getYPosOnScreen());
-                g.drawImage(sprite.getScaledImage(currentWidthOffset, currentHeightOffset), 0,0, null);
+                //TODO
             }
         }
+        g.drawImage(sprite.getScaledImage(currentWidthOffset, currentHeightOffset), 0,0, null);
     }
 
     public void addScreenObject(ScreenObject so){

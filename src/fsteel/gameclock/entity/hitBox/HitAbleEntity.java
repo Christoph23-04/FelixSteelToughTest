@@ -1,7 +1,7 @@
 package fsteel.gameclock.entity.hitBox;
 
 import fsteel.gameclock.entity.MoveAbleEntity;
-import fsteel.gameclock.entity.Skin;
+import fsteel.gameclock.entity.skin.Skin;
 import fsteel.gameclock.entity.Vector2D;
 import fsteel.util.ArrayListMap;
 

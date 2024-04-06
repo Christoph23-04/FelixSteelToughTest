@@ -15,17 +15,18 @@ public class Main {
 
     //NOT FINAL; ONLY TESTING
     public static void gamePlay(){
+        for(int i = 0; i < 10; i++){
         HitAbleEntity tity = new HitAbleEntity();
         tity.addHitAction(new HitAction(Hit.COLLISION_WITH_BORDER) {
             @Override
             public void onHit(Hit h) {
                 tity.setMoveDirection(h.getHitDirection());
-                System.out.println("x: " + tity.getCorrectXPos() + " - y: " +  tity.getCorrectYPos());
             }
         });
-        tity.setMoveDirection(new Vector2D(5f, (float) Math.random()*4));
+        tity.setMoveDirection(new Vector2D(5f, (float) Math.random() * 4));
         tity.setSpeedPxS(300);
         tity.appear();
+    }
 
         HitEmitter he = new HitEmitter() {
             @Override
