@@ -22,11 +22,23 @@ public class GameTickProcess extends GameClockProcess{
     }
 
     public void addTickAble(TickAble ta){
-        tickAbles.add(ta);
+        try {
+            super.getProcessScheduleObject().lock();
+            tickAbles.add(ta);
+        }
+        finally{
+            super.getProcessScheduleObject().unlock();
+        }
     }
 
     public void removeTickAble(TickAble ta){
-        tickAbles.remove(ta);
+        try{
+            super.getProcessScheduleObject().lock();
+            tickAbles.remove(ta);
+        }
+        finally{
+            super.getProcessScheduleObject().unlock();
+        }
     }
 
     public boolean isTicked(TickAble ta){

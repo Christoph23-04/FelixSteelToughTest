@@ -2,6 +2,9 @@ package fsteel.gameclock;
 
 import fsteel.main.GameSettings;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public abstract class GameClockProcess extends AbstractGameProcess{
 
     public static final long NANOS_IN_MILLIS = 1000000;
@@ -10,17 +13,19 @@ public abstract class GameClockProcess extends AbstractGameProcess{
     public static final int MAX_TICK_OFFSET_NANOS = 100000;
     private final long normNanosPerTick;
 
+    private final long[] pastTickTimes;
     private int targetTPS;
     private long targetNanosPerTick;
 
+    private Lock processScheduleObject;
 
-    private final long[] pastTickTimes;
     private long tickOffsetNanos;
 
     public GameClockProcess(int targetTPS){
         normNanosPerTick = NANOS_IN_SECOND / GameSettings.CONSTANT_FOR_NORMAL_TPS;
         pastTickTimes = new long[TPS_CALCULATION_SAVE_LENGTH];
         tickOffsetNanos = 0;
+        processScheduleObject = new ReentrantLock();
         setTargetTPS(targetTPS);
     }
 
@@ -38,38 +43,46 @@ public abstract class GameClockProcess extends AbstractGameProcess{
         long timeBeforeTick;
         long timeAfterTick = System.nanoTime();
         long tickDuration = targetNanosPerTick;
-        long sleepTime;
+        long sleepTime = 0;
         float lastNormTickRatio;
 
         while(isProcessRunning()){
-            timeBeforeTick = System.nanoTime();
-            lastNormTickRatio = (float)normNanosPerTick/(float)(tickDuration + (timeBeforeTick - timeAfterTick));
+            try{
+                processScheduleObject.lock();
+                timeBeforeTick = System.nanoTime();
+                lastNormTickRatio = (float)normNanosPerTick/(float)(tickDuration + (timeBeforeTick - timeAfterTick));
 
-            bufferTickTime(timeBeforeTick);
-            onTick(lastNormTickRatio);
+                bufferTickTime(timeBeforeTick);
+                onTick(lastNormTickRatio);
 
-            timeAfterTick = System.nanoTime();
-            tickDuration = timeAfterTick - timeBeforeTick;
-
-            if(tickDuration > targetNanosPerTick){
-                if(tickOffsetNanos < MAX_TICK_OFFSET_NANOS){
-                    tickOffsetNanos =+ tickDuration - targetNanosPerTick;
+                timeAfterTick = System.nanoTime();
+                tickDuration = timeAfterTick - timeBeforeTick;
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            finally{
+                processScheduleObject.unlock();
+            }
+            try{
+                if(tickDuration > targetNanosPerTick){
+                    if(tickOffsetNanos < MAX_TICK_OFFSET_NANOS){
+                        tickOffsetNanos =+ tickDuration - targetNanosPerTick;
+                    }
+                    continue;
                 }
-                continue;
-            }
 
-            sleepTime = targetNanosPerTick - tickDuration;
-            if(tickOffsetNanos > sleepTime){
-                tickOffsetNanos =- sleepTime;
-                continue;
-            }
+                sleepTime = targetNanosPerTick - tickDuration;
+                if(tickOffsetNanos > sleepTime){
+                    tickOffsetNanos =- sleepTime;
+                    continue;
+                }
 
-            sleepTime = sleepTime - tickOffsetNanos;
-            tickOffsetNanos = 0;
-
-            try {
+                sleepTime = sleepTime - tickOffsetNanos;
+                tickOffsetNanos = 0;
                 Thread.sleep((int)(sleepTime/NANOS_IN_MILLIS));
-            } catch (InterruptedException e) {
+            }
+            catch(InterruptedException e){
                 e.printStackTrace();
             }
         }
@@ -96,6 +109,10 @@ public abstract class GameClockProcess extends AbstractGameProcess{
         }
         long nanosPerTick = (timePeriodEnd - timePeriodStart)/foundTicks;
         return (float) NANOS_IN_SECOND/nanosPerTick;
+    }
+
+    public Lock getProcessScheduleObject(){
+        return processScheduleObject;
     }
 
     protected abstract void onTick(float lastTickRatio);

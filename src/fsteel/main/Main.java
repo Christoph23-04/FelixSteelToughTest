@@ -15,7 +15,7 @@ public class Main {
 
     //NOT FINAL; ONLY TESTING
     public static void gamePlay(){
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 500; i++){
         HitAbleEntity tity = new HitAbleEntity();
         tity.addHitAction(new HitAction(Hit.COLLISION_WITH_BORDER) {
             @Override

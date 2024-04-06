@@ -1,9 +1,11 @@
 package fsteel.gameclock.entity.hitBox;
 
 import fsteel.gameclock.GameClockProcess;
+import fsteel.main.Game;
 import fsteel.main.GameSettings;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
 
 public class HitCheckProcess extends GameClockProcess {
 
@@ -29,10 +31,24 @@ public class HitCheckProcess extends GameClockProcess {
         private static final ArrayList<HitBoxObject> hboObjects = new ArrayList<HitBoxObject>();
 
         public static void addHitBoxObject(HitBoxObject ha){
-            hboObjects.add(ha);
+            Lock lock = Game.getHitCheckProcess().getProcessScheduleObject();
+            try{
+                lock.lock();
+                hboObjects.add(ha);
+            }
+            finally {
+                lock.unlock();
+            }
         }
         public static void removeHitBoxObject(HitBoxObject ha){
-            hboObjects.remove(ha);
+            Lock lock = Game.getHitCheckProcess().getProcessScheduleObject();
+            try{
+                lock.lock();
+                hboObjects.remove(ha);
+            }
+            finally {
+                lock.unlock();
+            }
         }
     }
 
@@ -40,11 +56,25 @@ public class HitCheckProcess extends GameClockProcess {
         private static final ArrayList<HitEmitter> hEmitter = new ArrayList<HitEmitter>();
 
         public static void addHitEmitter(HitEmitter he){
-            hEmitter.add(he);
+            Lock lock = Game.getHitCheckProcess().getProcessScheduleObject();
+            try{
+                lock.lock();
+                hEmitter.add(he);
+            }
+            finally {
+                lock.unlock();
+            }
         }
 
         public static void removeHitEmitter(HitEmitter he){
-            hEmitter.remove(he);
+            Lock lock = Game.getHitCheckProcess().getProcessScheduleObject();
+            try{
+                lock.lock();
+                hEmitter.remove(he);
+            }
+            finally {
+                lock.unlock();
+            }
         }
     }
 
