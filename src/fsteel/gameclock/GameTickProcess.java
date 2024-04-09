@@ -6,7 +6,7 @@ import fsteel.main.GameSettings;
 import java.util.ArrayList;
 
 public class GameTickProcess extends GameClockProcess{
-    private ArrayList<TickAble> tickAbles;
+    private final ArrayList<TickAble> tickAbles;
 
 
     public GameTickProcess() {

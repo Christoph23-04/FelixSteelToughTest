@@ -1,6 +1,6 @@
 package fsteel.window;
 
-import fsteel.keylistening.GameKeyBinding;
+import fsteel.userInputListening.GameKeyBinding;
 
 import javax.swing.*;
 

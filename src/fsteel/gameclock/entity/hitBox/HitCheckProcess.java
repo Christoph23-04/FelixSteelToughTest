@@ -6,6 +6,7 @@ import fsteel.main.GameSettings;
 
 import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class HitCheckProcess extends GameClockProcess {
 
@@ -28,10 +29,12 @@ public class HitCheckProcess extends GameClockProcess {
     }
 
     public static class HitBoxObjects{
+
         private static final ArrayList<HitBoxObject> hboObjects = new ArrayList<HitBoxObject>();
 
         public static void addHitBoxObject(HitBoxObject ha){
             Lock lock = Game.getHitCheckProcess().getProcessScheduleObject();
+            Game.getHitCheckProcess().requestLockTime();
             try{
                 lock.lock();
                 hboObjects.add(ha);
@@ -41,7 +44,8 @@ public class HitCheckProcess extends GameClockProcess {
             }
         }
         public static void removeHitBoxObject(HitBoxObject ha){
-            Lock lock = Game.getHitCheckProcess().getProcessScheduleObject();
+            ReentrantLock lock = Game.getHitCheckProcess().getProcessScheduleObject();
+            Game.getHitCheckProcess().requestLockTime();
             try{
                 lock.lock();
                 hboObjects.remove(ha);
@@ -53,10 +57,12 @@ public class HitCheckProcess extends GameClockProcess {
     }
 
     public static class HitEmitterObjects{
+
         private static final ArrayList<HitEmitter> hEmitter = new ArrayList<HitEmitter>();
 
         public static void addHitEmitter(HitEmitter he){
             Lock lock = Game.getHitCheckProcess().getProcessScheduleObject();
+            Game.getHitCheckProcess().requestLockTime();
             try{
                 lock.lock();
                 hEmitter.add(he);
@@ -68,6 +74,7 @@ public class HitCheckProcess extends GameClockProcess {
 
         public static void removeHitEmitter(HitEmitter he){
             Lock lock = Game.getHitCheckProcess().getProcessScheduleObject();
+            Game.getHitCheckProcess().requestLockTime();
             try{
                 lock.lock();
                 hEmitter.remove(he);
@@ -84,12 +91,13 @@ public class HitCheckProcess extends GameClockProcess {
 
     @Override
     protected void onTick(float lastTickRatio) {
+        long l = System.currentTimeMillis();
         for(HitEmitter emitter : HitEmitterObjects.hEmitter){
             for(HitBoxObject receiver : HitBoxObjects.hboObjects){
-                if(receiver == emitter){
+                if(!emitter.isHitFor(receiver)){
                     continue;
                 }
-                if(!emitter.isHitFor(receiver)){
+                if(receiver == emitter){
                     continue;
                 }
                 receiver.onHit(emitter.getHitForObject(receiver));

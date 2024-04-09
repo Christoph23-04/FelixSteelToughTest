@@ -8,13 +8,17 @@ import java.awt.image.BufferedImage;
 
 public class Skin{
 
-    public static Skin createBasicSkin(int xSize, int ySize){
+    public static Skin createBasicSkin(int xSize, int ySize, Color c){
         BufferedImage img = new BufferedImage(xSize, ySize, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
-        g.setColor(Color.MAGENTA);
+        g.setColor(c);
         g.fillRect(0,0,xSize, ySize);
         g.dispose();
         return new Skin(img);
+    }
+
+    public static Skin createBasicSkin(int xSize, int ySize){
+        return createBasicSkin(xSize, ySize, Color.MAGENTA);
     }
 
     private Image appearance;

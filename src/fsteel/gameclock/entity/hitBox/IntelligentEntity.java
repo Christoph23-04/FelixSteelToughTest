@@ -1,6 +1,8 @@
 package fsteel.gameclock.entity.hitBox;
 
-public class IntelligentEntity extends HitAbleEntity{
+import fsteel.gameclock.entity.HitAbleEntity;
+
+public class IntelligentEntity extends HitAbleEntity {
 
     public IntelligentEntity(){
 

@@ -1,4 +1,4 @@
-package fsteel.keylistening;
+package fsteel.userInputListening;
 
 public class GameKeyBindingAdapter extends GameKeyBinding{
 

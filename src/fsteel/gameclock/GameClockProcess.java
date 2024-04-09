@@ -2,7 +2,6 @@ package fsteel.gameclock;
 
 import fsteel.main.GameSettings;
 
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class GameClockProcess extends AbstractGameProcess{
@@ -11,13 +10,15 @@ public abstract class GameClockProcess extends AbstractGameProcess{
     public static final long NANOS_IN_SECOND = 1000000000;
     public static final int TPS_CALCULATION_SAVE_LENGTH = 10;
     public static final int MAX_TICK_OFFSET_NANOS = 100000;
+    public static final int MILLIS_WAITING_ON_LOCK_REQUEST = 2;
     private final long normNanosPerTick;
 
     private final long[] pastTickTimes;
     private int targetTPS;
     private long targetNanosPerTick;
 
-    private Lock processScheduleObject;
+    private final ReentrantLock processScheduleObject;
+    private boolean isLockTimeRequested;
 
     private long tickOffsetNanos;
 
@@ -26,16 +27,8 @@ public abstract class GameClockProcess extends AbstractGameProcess{
         pastTickTimes = new long[TPS_CALCULATION_SAVE_LENGTH];
         tickOffsetNanos = 0;
         processScheduleObject = new ReentrantLock();
+        isLockTimeRequested = false;
         setTargetTPS(targetTPS);
-    }
-
-    public void setTargetTPS(int targetTPS){
-        this.targetTPS = targetTPS;
-        targetNanosPerTick = NANOS_IN_SECOND/targetTPS;
-    }
-
-    public int getTargetTPS(){
-        return targetTPS;
     }
 
     @Override
@@ -45,18 +38,19 @@ public abstract class GameClockProcess extends AbstractGameProcess{
         long tickDuration = targetNanosPerTick;
         long sleepTime = 0;
         float lastNormTickRatio;
+        boolean wasThreadPermanentAwake = true;
 
         while(isProcessRunning()){
+            timeBeforeTick = System.nanoTime();
+            lastNormTickRatio = (float)normNanosPerTick/(float)(tickDuration + (timeBeforeTick - timeAfterTick));
+            bufferTickTime(timeBeforeTick);
+            if(isLockTimeRequested & wasThreadPermanentAwake){
+                performLockRequest();
+            }
+            isLockTimeRequested = false;
             try{
                 processScheduleObject.lock();
-                timeBeforeTick = System.nanoTime();
-                lastNormTickRatio = (float)normNanosPerTick/(float)(tickDuration + (timeBeforeTick - timeAfterTick));
-
-                bufferTickTime(timeBeforeTick);
                 onTick(lastNormTickRatio);
-
-                timeAfterTick = System.nanoTime();
-                tickDuration = timeAfterTick - timeBeforeTick;
             }
             catch (Exception e){
                 e.printStackTrace();
@@ -64,27 +58,39 @@ public abstract class GameClockProcess extends AbstractGameProcess{
             finally{
                 processScheduleObject.unlock();
             }
+            timeAfterTick = System.nanoTime();
+            tickDuration = timeAfterTick - timeBeforeTick;
+            wasThreadPermanentAwake = true;
+            if(tickDuration > targetNanosPerTick){
+                if(tickOffsetNanos < MAX_TICK_OFFSET_NANOS){
+                    tickOffsetNanos =+ tickDuration - targetNanosPerTick;
+                }
+                continue;
+            }
+            sleepTime = targetNanosPerTick - tickDuration;
+            if(tickOffsetNanos > sleepTime){
+                tickOffsetNanos =- sleepTime;
+                continue;
+            }
+            sleepTime = sleepTime - tickOffsetNanos;
+            tickOffsetNanos = 0;
             try{
-                if(tickDuration > targetNanosPerTick){
-                    if(tickOffsetNanos < MAX_TICK_OFFSET_NANOS){
-                        tickOffsetNanos =+ tickDuration - targetNanosPerTick;
-                    }
-                    continue;
-                }
-
-                sleepTime = targetNanosPerTick - tickDuration;
-                if(tickOffsetNanos > sleepTime){
-                    tickOffsetNanos =- sleepTime;
-                    continue;
-                }
-
-                sleepTime = sleepTime - tickOffsetNanos;
-                tickOffsetNanos = 0;
                 Thread.sleep((int)(sleepTime/NANOS_IN_MILLIS));
+                wasThreadPermanentAwake = false;
             }
             catch(InterruptedException e){
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void performLockRequest(){
+        isLockTimeRequested = false;
+        try{
+            Thread.sleep(MILLIS_WAITING_ON_LOCK_REQUEST);
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -111,8 +117,21 @@ public abstract class GameClockProcess extends AbstractGameProcess{
         return (float) NANOS_IN_SECOND/nanosPerTick;
     }
 
-    public Lock getProcessScheduleObject(){
+    public ReentrantLock getProcessScheduleObject(){
         return processScheduleObject;
+    }
+
+    public void requestLockTime(){
+        isLockTimeRequested = true;
+    }
+
+    public void setTargetTPS(int targetTPS){
+        this.targetTPS = targetTPS;
+        targetNanosPerTick = NANOS_IN_SECOND/targetTPS;
+    }
+
+    public int getTargetTPS(){
+        return targetTPS;
     }
 
     protected abstract void onTick(float lastTickRatio);

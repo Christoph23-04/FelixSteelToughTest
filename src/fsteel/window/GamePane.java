@@ -5,6 +5,7 @@ import fsteel.gameclock.rendering.GraphicRenderer;
 import fsteel.gameclock.rendering.RenderCanvas;
 import fsteel.gameclock.rendering.ScreenObjectRenderer;
 import fsteel.main.GameSettings;
+import fsteel.userInputListening.GameMouseManager;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -20,6 +21,7 @@ public class GamePane extends Canvas implements RenderCanvas {
     public GamePane(ScreenObjectRenderer renderer){
         this.renderer = renderer;
         super.setIgnoreRepaint(true);
+        super.addMouseListener(new GameMouseManager());
     }
 
     @Override

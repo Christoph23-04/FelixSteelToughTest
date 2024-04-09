@@ -29,7 +29,6 @@ public class ScreenObjectRenderer implements GraphicRenderer{
         for(ScreenObject so : screenObjects){
             if(so != null && so.getAppearance() != null){
                 sprite.drawObject(so.getAppearance(), so.getXPosOnScreen(), so.getYPosOnScreen());
-                //TODO
             }
         }
         g.drawImage(sprite.getScaledImage(currentWidthOffset, currentHeightOffset), 0,0, null);
@@ -45,5 +44,13 @@ public class ScreenObjectRenderer implements GraphicRenderer{
 
     public boolean isObjectRendered(ScreenObject so){
         return screenObjects.contains(so);
+    }
+
+    public double getCurrentWidthOffset(){
+        return currentWidthOffset;
+    }
+
+    public double getCurrentHeightOffset(){
+        return currentHeightOffset;
     }
 }

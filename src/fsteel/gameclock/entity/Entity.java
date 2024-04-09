@@ -8,8 +8,8 @@ import java.awt.image.BufferedImage;
 
 public class Entity implements ScreenObject{
 
-    private float xPos;
-    private float yPos;
+    private double xPos;
+    private double yPos;
     private Skin skin;
 
     public Entity(){
@@ -22,14 +22,6 @@ public class Entity implements ScreenObject{
         setSkin(skin);
     }
 
-    private BufferedImage createBasicSkin(){
-        BufferedImage img = new BufferedImage(20,20,BufferedImage.TYPE_INT_ARGB);
-        Graphics g = img.getGraphics();
-        g.setColor(Color.CYAN);
-        g.fillRect(0,0,20,20);
-        return img;
-    }
-
     public void appear(){
         Game.getRenderer().addScreenObject(this);
     }
@@ -38,7 +30,7 @@ public class Entity implements ScreenObject{
         Game.getRenderer().removeScreenObject(this);
     }
 
-    public void setPos(float xPos, float yPos){
+    public void setPos(double xPos, double yPos){
         this.xPos = xPos;
         this.yPos = yPos;
     }
@@ -52,7 +44,7 @@ public class Entity implements ScreenObject{
         return (int) xPos;
     }
 
-    public float getCorrectXPos(){
+    public double getCorrectXPos(){
         return xPos;
     }
 
@@ -61,7 +53,7 @@ public class Entity implements ScreenObject{
         return (int) yPos;
     }
 
-    public float getCorrectYPos(){
+    public double getCorrectYPos(){
         return yPos;
     }
 
@@ -72,6 +64,14 @@ public class Entity implements ScreenObject{
 
     public Skin getSkin() {
         return skin;
+    }
+
+    public int getSimpleXSise(){
+        return skin.getAppearance().getWidth(null);
+    }
+
+    public int getSimpleYSise(){
+        return skin.getAppearance().getHeight(null);
     }
 
     public boolean isOnScreen(){

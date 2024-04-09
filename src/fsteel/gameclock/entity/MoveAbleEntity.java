@@ -10,7 +10,7 @@ public class MoveAbleEntity extends Entity implements TickAble {
     private float totalYDiff;
 
     private Vector2D moveDirection;
-    private float speedPxS;
+    private double speedPxS;
 
     public MoveAbleEntity(){
         moveDirection = new Vector2D();
@@ -36,21 +36,21 @@ public class MoveAbleEntity extends Entity implements TickAble {
         if(speedPxS < 0.00001 | moveDirection.getVectorAmount() < 0.00001){
             return;
         }
-        float distanceForTick = (speedPxS/((float)GameSettings.CONSTANT_FOR_NORMAL_TPS)*tickPeriod);
-        totalXDiff =  moveDirection.getXDirToAmount(distanceForTick) * tickPeriod;
-        totalYDiff = moveDirection.getYDirToAmount(distanceForTick) * tickPeriod;
+        float distanceForTick = (float)(speedPxS/((float)GameSettings.CONSTANT_FOR_NORMAL_TPS)*tickPeriod);
+        totalXDiff =  (float)moveDirection.getXDirToAmount(distanceForTick) * tickPeriod;
+        totalYDiff = (float)moveDirection.getYDirToAmount(distanceForTick) * tickPeriod;
         super.setPos(super.getCorrectXPos() + totalXDiff, super.getCorrectYPos() + totalYDiff);
     }
 
-    public void setMoveDirection(float xDir, float yDir){
+    public void setMoveDirection(double xDir, double yDir){
         moveDirection.setDirection(xDir, yDir);
     }
 
-    public void setXDir(float xDir){
+    public void setXDir(double xDir){
         setMoveDirection(xDir, moveDirection.getYDir());
     }
 
-    public void setYDir(float yDir){
+    public void setYDir(double yDir){
         setMoveDirection(moveDirection.getXDir(), yDir);
     }
 
@@ -62,19 +62,19 @@ public class MoveAbleEntity extends Entity implements TickAble {
         return moveDirection;
     }
 
-    public float getXDir(){
+    public double getXDir(){
         return moveDirection.getXDir();
     }
 
-    public float getYDir(){
+    public double getYDir(){
         return moveDirection.getYDir();
     }
 
-    public void setSpeedPxS(float speedPxS){
+    public void setSpeedPxS(double speedPxS){
         this.speedPxS = speedPxS;
     }
 
-    public float getSpeedPxS(){
+    public double getSpeedPxS(){
         return speedPxS;
     }
 }

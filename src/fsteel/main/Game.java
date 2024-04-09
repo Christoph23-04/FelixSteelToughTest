@@ -6,7 +6,7 @@ import fsteel.gameclock.GameRenderingProcess;
 import fsteel.gameclock.GameTickProcess;
 import fsteel.gameclock.entity.hitBox.HitCheckProcess;
 import fsteel.gameclock.rendering.ScreenObjectRenderer;
-import fsteel.keylistening.GameKeyBinding;
+import fsteel.userInputListening.GameKeyBinding;
 import fsteel.window.GameFrame;
 import fsteel.window.GamePane;
 

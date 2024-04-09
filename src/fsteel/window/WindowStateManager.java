@@ -1,11 +1,9 @@
 package fsteel.window;
 
-import fsteel.keylistening.GameKeyBinding;
-import fsteel.keylistening.GameKeyBindingAdapter;
+import fsteel.userInputListening.GameKeyBindingAdapter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 public class WindowStateManager {
 

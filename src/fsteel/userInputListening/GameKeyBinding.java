@@ -1,4 +1,4 @@
-package fsteel.keylistening;
+package fsteel.userInputListening;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

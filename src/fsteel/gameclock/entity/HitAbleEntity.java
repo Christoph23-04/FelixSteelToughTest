@@ -1,15 +1,17 @@
-package fsteel.gameclock.entity.hitBox;
+package fsteel.gameclock.entity;
 
-import fsteel.gameclock.entity.MoveAbleEntity;
+import fsteel.gameclock.entity.hitBox.*;
 import fsteel.gameclock.entity.skin.Skin;
-import fsteel.gameclock.entity.Vector2D;
 import fsteel.util.ArrayListMap;
+import fsteel.window.border.BorderHitAction;
 
 public class HitAbleEntity extends MoveAbleEntity implements HitBoxObject, HitEmitter {
 
     private HitBox hitBox;
-    private ArrayListMap<Integer, HitAction> hitActions;
+    private final ArrayListMap<Integer, HitAction> hitActions;
     private boolean areBoundsEqualsToSkin;
+    private boolean isRespectingBoarder;
+    private BorderHitAction boarderHitAction;
 
     public HitAbleEntity() {
         hitBox = null;
@@ -18,6 +20,8 @@ public class HitAbleEntity extends MoveAbleEntity implements HitBoxObject, HitEm
         if(super.getSkin() != null){
             hitBox = super.getSkin().getAptHitBox(this);
         }
+        isRespectingBoarder = false;
+        boarderHitAction = BorderHitAction.
     }
 
     @Override
@@ -30,6 +34,11 @@ public class HitAbleEntity extends MoveAbleEntity implements HitBoxObject, HitEm
     public void disappear() {
         super.disappear();
         HitCheckProcess.removeObject(this);
+    }
+
+    @Override
+    public boolean doesRecognizeHitType(int hitType) {
+        return hitActions.containsKey(hitType);
     }
 
     @Override
@@ -60,6 +69,19 @@ public class HitAbleEntity extends MoveAbleEntity implements HitBoxObject, HitEm
         this.areBoundsEqualsToSkin = shouldBoundsBeEqualToSkin;
     }
 
+    public void setRespectingBoarder(boolean isEntityRespectingBoarder){
+        this.isRespectingBoarder = isEntityRespectingBoarder;
+        if(!isRespectingBoarder){
+            removeHitAction(boarderHitAction);
+            return;
+        }
+        addHitAction(boarderHitAction);
+    }
+
+    public void setBoarderHitAction(BorderHitAction bha){
+
+    }
+
     public boolean areBoundsEqualsToSkin() {
         return areBoundsEqualsToSkin;
     }
@@ -71,6 +93,9 @@ public class HitAbleEntity extends MoveAbleEntity implements HitBoxObject, HitEm
 
     @Override
     public boolean isHitFor(HitBoxObject hbo) {
+        if(!hbo.doesRecognizeHitType(Hit.COLLISION_OF_MOVE_ABLE_ENTITY)){
+            return false;
+        }
         return hbo.getHitBox().isHit(hitBox);
     }
 
