@@ -10,7 +10,9 @@ public class ArrayListMap<K, V> extends HashMap<K, ArrayList<V>> {
         if(!super.containsKey(key)){
             super.put(key, new ArrayList<V>());
         }
-        super.get(key).add(value);
+        if(!super.get(key).contains(value)){
+            super.get(key).add(value);
+        }
     }
 
     public void putObjects(K key, Collection<? extends V> values){

@@ -21,7 +21,8 @@ public class HitAbleEntity extends MoveAbleEntity implements HitBoxObject, HitEm
             hitBox = super.getSkin().getAptHitBox(this);
         }
         isRespectingBoarder = false;
-        boarderHitAction = BorderHitAction.
+        boarderHitAction = BorderHitAction.createDefaultBoarderHitActionForEntity(this);
+        setRespectingBoarder(true);
     }
 
     @Override
@@ -79,7 +80,8 @@ public class HitAbleEntity extends MoveAbleEntity implements HitBoxObject, HitEm
     }
 
     public void setBoarderHitAction(BorderHitAction bha){
-
+        this.boarderHitAction = bha;
+        setRespectingBoarder(true);
     }
 
     public boolean areBoundsEqualsToSkin() {

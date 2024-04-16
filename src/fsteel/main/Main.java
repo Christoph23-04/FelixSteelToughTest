@@ -59,6 +59,7 @@ public class Main {
                             (int) (Math.random()*255), (int)(Math.random()*255))));
                 }
             });
+            tity.setRespectingBoarder(false);
             tity.setMoveDirection(new Vector2D((float) Math.random(), (float) Math.random()));
             tity.setSpeedPxS(800+Math.random()*50);
             tity.appear();
