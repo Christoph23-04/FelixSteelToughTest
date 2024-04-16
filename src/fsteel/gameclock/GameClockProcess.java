@@ -42,7 +42,7 @@ public abstract class GameClockProcess extends AbstractGameProcess{
 
         while(isProcessRunning()){
             timeBeforeTick = System.nanoTime();
-            lastNormTickRatio = (float)normNanosPerTick/(float)(tickDuration + (timeBeforeTick - timeAfterTick));
+            lastNormTickRatio = (float)(tickDuration + (timeBeforeTick - timeAfterTick))/(float)normNanosPerTick;
             bufferTickTime(timeBeforeTick);
             if(isLockTimeRequested & wasThreadPermanentAwake){
                 performLockRequest();
@@ -69,13 +69,13 @@ public abstract class GameClockProcess extends AbstractGameProcess{
             }
             sleepTime = targetNanosPerTick - tickDuration;
             if(tickOffsetNanos > sleepTime){
-                tickOffsetNanos =- sleepTime;
+                tickOffsetNanos = tickOffsetNanos- sleepTime;
                 continue;
             }
             sleepTime = sleepTime - tickOffsetNanos;
             tickOffsetNanos = 0;
             try{
-                Thread.sleep((int)(sleepTime/NANOS_IN_MILLIS));
+                Thread.sleep((int)(sleepTime/NANOS_IN_MILLIS)+1);
                 wasThreadPermanentAwake = false;
             }
             catch(InterruptedException e){
@@ -134,5 +134,5 @@ public abstract class GameClockProcess extends AbstractGameProcess{
         return targetTPS;
     }
 
-    protected abstract void onTick(float lastTickRatio);
+    protected abstract void onTick(float lastTickDeviation);
 }

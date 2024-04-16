@@ -37,8 +37,8 @@ public class MoveAbleEntity extends Entity implements TickAble {
             return;
         }
         float distanceForTick = (float)(speedPxS/((float)GameSettings.CONSTANT_FOR_NORMAL_TPS)*tickPeriod);
-        totalXDiff =  (float)moveDirection.getXDirToAmount(distanceForTick) * tickPeriod;
-        totalYDiff = (float)moveDirection.getYDirToAmount(distanceForTick) * tickPeriod;
+        totalXDiff =  (float)moveDirection.getXDirToAmount(distanceForTick);
+        totalYDiff = (float)moveDirection.getYDirToAmount(distanceForTick);
         super.setPos(super.getCorrectXPos() + totalXDiff, super.getCorrectYPos() + totalYDiff);
     }
 
