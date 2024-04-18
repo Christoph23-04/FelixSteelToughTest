@@ -11,7 +11,6 @@ public class Vector2D {
     public static final float STANDARD_VECTOR_LENGTH = 1f;
 
     public static final int VECTOR_DIRECTION_UP = 0;
-
     public static final int VECTOR_DIRECTION_DOWN = 1;
     public static final int VECTOR_DIRECTION_RIGHT = 2;
     public static final int VECTOR_DIRECTION_LEFT = 3;
