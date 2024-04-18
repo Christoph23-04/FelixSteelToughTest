@@ -16,21 +16,21 @@ public class SlidingBorderTouchAction extends BorderTouchAction {
 
     @Override
     public void onVerticalBorderTouched(Touch t) {
-        double oldAmount = touchReceiver.getMoveDirection().getVectorAmount();
+        double speedToReduce = Math.abs(touchReceiver.getMoveDirection().getXDir());
         touchReceiver.setMoveDirection(new Vector2D(0, touchReceiver.getMoveDirection().getYDir()));
-        touchReceiver.setSpeedPxS(calculateSpeed(oldAmount, touchReceiver.getMoveDirection().getVectorAmount()));
+        touchReceiver.setSpeedPxS(calculateSpeed(speedToReduce));
     }
 
     @Override
     public void onHorizontalBorderTouched(Touch t) {
-        double oldAmount = touchReceiver.getMoveDirection().getVectorAmount();
+        double speedToReduce = Math.abs(touchReceiver.getMoveDirection().getYDir());
         touchReceiver.setMoveDirection(new Vector2D(touchReceiver.getMoveDirection().getXDir(), 0));
-        touchReceiver.setSpeedPxS(calculateSpeed(oldAmount, touchReceiver.getMoveDirection().getVectorAmount()));
+        touchReceiver.setSpeedPxS(calculateSpeed(speedToReduce));
     }
 
-    private double calculateSpeed(double oldVecAmount, double newVecAmount){
+    private double calculateSpeed(double speedToReduce){
         if(shouldReduceSpeed){
-            return touchReceiver.getSpeedPxS()*(newVecAmount/oldVecAmount);
+            return touchReceiver.getSpeedPxS() - speedToReduce;
         }
         return touchReceiver.getSpeedPxS();
     }

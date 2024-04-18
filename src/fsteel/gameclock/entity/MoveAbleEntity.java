@@ -6,17 +6,17 @@ import fsteel.main.GameSettings;
 import fsteel.window.border.BorderTouchAction;
 import fsteel.window.border.SlidingBorderTouchAction;
 
+import java.util.ArrayList;
+
 public class MoveAbleEntity extends TouchAbleEntity implements TickAble, MovingObject {
 
-    private float totalXDiff;
-    private float totalYDiff;
+    private double totalXDiff;
+    private double totalYDiff;
     private Vector2D moveDirection;
-    private double speedPxS;
     private BorderTouchAction borderTouchAction;
 
     public MoveAbleEntity(){
         moveDirection = new Vector2D();
-        speedPxS = 0;
         totalXDiff = 0;
         totalYDiff = 0;
         borderTouchAction = new SlidingBorderTouchAction(this);
@@ -25,12 +25,11 @@ public class MoveAbleEntity extends TouchAbleEntity implements TickAble, MovingO
 
     @Override
     public void onTick(float tickPeriod) {
-        if(speedPxS < 0.00001 || moveDirection.getVectorAmount() < 0.00001){
+        if(moveDirection.getVectorAmount() < 0.0001){
             return;
         }
-        float distanceForTick = (float)(speedPxS/((float)GameSettings.CONSTANT_FOR_NORMAL_TPS)*tickPeriod);
-        totalXDiff =  (float)moveDirection.getXDirToAmount(distanceForTick);
-        totalYDiff = (float)moveDirection.getYDirToAmount(distanceForTick);
+        totalXDiff =  moveDirection.getXDir()/GameSettings.CONSTANT_FOR_NORMAL_TPS*tickPeriod;
+        totalYDiff = moveDirection.getYDir()/GameSettings.CONSTANT_FOR_NORMAL_TPS*tickPeriod;
         super.setLocation(super.getCorrectXPos() + totalXDiff, super.getCorrectYPos() + totalYDiff);
     }
 
@@ -59,16 +58,17 @@ public class MoveAbleEntity extends TouchAbleEntity implements TickAble, MovingO
 
     @Override
     public void setSpeedPxS(double speedPxS){
-        this.speedPxS = speedPxS;
+        moveDirection.scaleVector(speedPxS);
     }
 
     @Override
     public double getSpeedPxS(){
-        return speedPxS;
+        return moveDirection.getVectorAmount();
     }
 
     @Override
     public void setMoveDirection(Vector2D moveDirection){
+        moveDirection.scaleVector(this.moveDirection.getVectorAmount());
         this.moveDirection = moveDirection;
     }
     @Override

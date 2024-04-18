@@ -20,28 +20,36 @@ public class Vector2D {
     private double amount;
 
     public Vector2D(){
-        this(0, 0);
+        this(0, 1);
     }
 
     public Vector2D(int xDir, int yDir){
         this((double)xDir,yDir);
     }
 
+    public Vector2D(Vector2D v){
+        this(v.getXDir(), v.getYDir());
+    }
+
     public Vector2D(double xDir, double yDir){
-         this.xDir = xDir;
-         this.yDir = yDir;
-         amount =  Math.abs(xDir) + Math.abs(yDir);
+         setDir(xDir, yDir);
     }
 
-    public Vector2D getScaledVector(double newLength){
+    public void scaleVector(double newLength){
         if(amount == 0){
-            return new Vector2D();
+            setDir(newLength/2, newLength/2);
         }
-        return new Vector2D(xDir*(newLength/amount), yDir*(newLength/amount));
+        setDir(xDir*(newLength/amount), yDir*(newLength/amount));
     }
 
-    public Vector2D calculateSumVector(Vector2D vector){
-        return new Vector2D(xDir + vector.getXDir(), yDir + vector.getYDir());
+    public void setDir(double xDir, double yDir){
+        this.xDir = xDir;
+        this.yDir = yDir;
+        amount = Math.abs(xDir) + Math.abs(yDir);
+    }
+
+    public void addVector(Vector2D vector){
+        setDir(xDir + vector.xDir, yDir + vector.getYDir());
     }
 
     public double getXDir(){
@@ -85,5 +93,4 @@ public class Vector2D {
         }
         return VECTOR_DIRECTION_UP;
     }
-
 }
