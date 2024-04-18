@@ -7,7 +7,6 @@ public interface GameProcess {
     public static final int ORIGIN_GAME_START = 0;
     public static final int GAME_START_AFTER_BREAK = 1;
     public static final int PROCESS_START_EXTERNAL = 2;
-
     public static final int GAME_STOP_THROUGH_WINDOW = 100;
     public static final int GAME_STOP_FOR_BREAK = 101;
     public static final int PROCESS_STOP_EXTERNAL = 102;

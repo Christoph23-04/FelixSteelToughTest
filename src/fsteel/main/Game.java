@@ -4,12 +4,14 @@ import fsteel.gameclock.GameProcess;
 import fsteel.gameclock.GameProcessManager;
 import fsteel.gameclock.GameRenderingProcess;
 import fsteel.gameclock.GameTickProcess;
-import fsteel.gameclock.entity.hitBox.HitCheckProcess;
+import fsteel.gameclock.entity.hitBox.TouchCheckProcess;
 import fsteel.gameclock.rendering.ScreenObjectRenderer;
 import fsteel.userInputListening.GameKeyBinding;
 import fsteel.window.GameFrame;
 import fsteel.window.GamePane;
+import fsteel.window.border.WindowBorder;
 
+import javax.swing.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,7 +20,7 @@ public class Game {
     private static GameFrame gameFrame;
     private static ScreenObjectRenderer renderer;
     private static GameRenderingProcess renderProcess;
-    private static HitCheckProcess hitCheckProcess;
+    private static TouchCheckProcess touchCheckProcess;
     private static GameTickProcess tickProcess;
 
     public static void startGame(){
@@ -30,7 +32,9 @@ public class Game {
     private static void startProcesses(){
         renderProcess = new GameRenderingProcess(gameFrame.getGamePane());
         tickProcess = new GameTickProcess();
-        hitCheckProcess = new HitCheckProcess();
+        touchCheckProcess = new TouchCheckProcess();
+        WindowBorder wb = new WindowBorder();
+        gameFrame.setWindowBorder(wb);
         GameProcessManager.startGameProcesses(GameProcess.ORIGIN_GAME_START);
         startSpecsPrint();
     }
@@ -43,7 +47,7 @@ public class Game {
             public void run() {
                 System.out.println(renderProcess.getCalculatedTPS() + "  FPS Render Process - rendered");
                 System.out.println(tickProcess.getCalculatedTPS() + "  TPS Tick Process - ticked");
-                System.out.println(hitCheckProcess.getCalculatedTPS() + "  TPS Hit Check - ticked");
+                System.out.println(touchCheckProcess.getCalculatedTPS() + "  TPS Hit Check - ticked");
             }
         }, 1000, 1000);
     }
@@ -68,8 +72,8 @@ public class Game {
         return tickProcess;
     }
 
-    public static HitCheckProcess getHitCheckProcess(){
-        return hitCheckProcess;
+    public static TouchCheckProcess getTouchCheckProcess(){
+        return touchCheckProcess;
     }
 
     public static void addGameKeyBinding(GameKeyBinding gkb){

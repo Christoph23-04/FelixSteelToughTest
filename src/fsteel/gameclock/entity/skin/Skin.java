@@ -1,7 +1,7 @@
 package fsteel.gameclock.entity.skin;
 
+import fsteel.gameclock.entity.ScreenPosition;
 import fsteel.gameclock.entity.hitBox.HitBox;
-import fsteel.gameclock.entity.hitBox.HitBoxObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -21,16 +21,16 @@ public class Skin{
         return createBasicSkin(xSize, ySize, Color.MAGENTA);
     }
 
-    private Image appearance;
+    private final Image appearance;
 
     public Skin(Image appearance){
         this.appearance = appearance;
     }
 
-    public HitBox getAptHitBox(HitBoxObject hbo){
+    public HitBox getAptHitBox(ScreenPosition sp){
         int skinWidth = appearance.getWidth(null);
         int skinHeight = appearance.getHeight(null);
-        return HitBox.createSquareHitbox(skinWidth, skinHeight, hbo);
+        return HitBox.createSquareHitbox(skinWidth, skinHeight, sp);
     }
 
     public Image getAppearance(){

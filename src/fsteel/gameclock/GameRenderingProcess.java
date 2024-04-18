@@ -22,7 +22,7 @@ public class GameRenderingProcess extends GameClockProcess {
     }
 
     @Override
-    protected void onTick(float lastTickRatio) {
+    protected void onTick(float lastTickDeviation) {
         renderingCanvas.renderAll();
     }
 }

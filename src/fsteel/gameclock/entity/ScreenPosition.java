@@ -1,6 +1,6 @@
 package fsteel.gameclock.entity;
 
-public interface ScreenPoint {
+public interface ScreenPosition {
 
     public int getXPosOnScreen();
     public int getYPosOnScreen();

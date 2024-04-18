@@ -10,9 +10,15 @@ public class Vector2D {
 
     public static final float STANDARD_VECTOR_LENGTH = 1f;
 
+    public static final int VECTOR_DIRECTION_UP = 0;
+
+    public static final int VECTOR_DIRECTION_DOWN = 1;
+    public static final int VECTOR_DIRECTION_RIGHT = 2;
+    public static final int VECTOR_DIRECTION_LEFT = 3;
+
     private double xDir;
     private double yDir;
-    private double currentAmount;
+    private double amount;
 
     public Vector2D(){
         this(0, 0);
@@ -23,17 +29,20 @@ public class Vector2D {
     }
 
     public Vector2D(double xDir, double yDir){
-         setDirection(xDir, yDir);
+         this.xDir = xDir;
+         this.yDir = yDir;
+         amount =  Math.abs(xDir) + Math.abs(yDir);
     }
 
-    private void calculateAmount(){
-        currentAmount =  Math.abs(xDir) + Math.abs(yDir);
+    public Vector2D getScaledVector(double newLength){
+        if(amount == 0){
+            return new Vector2D();
+        }
+        return new Vector2D(xDir*(newLength/amount), yDir*(newLength/amount));
     }
 
-    public void setDirection(double xDir, double yDir){
-        this.xDir = xDir;
-        this.yDir = yDir;
-        calculateAmount();
+    public Vector2D calculateSumVector(Vector2D vector){
+        return new Vector2D(xDir + vector.getXDir(), yDir + vector.getYDir());
     }
 
     public double getXDir(){
@@ -41,10 +50,10 @@ public class Vector2D {
     }
 
     public double getXDirToAmount(double amount){
-        if(currentAmount < 0.0001){
+        if(this.amount < 0.0001){
             return 0;
         }
-        return getXDir() * amount/currentAmount;
+        return getXDir() * (amount / this.amount);
     }
 
     public double getYDir(){
@@ -52,13 +61,30 @@ public class Vector2D {
     }
 
     public double getYDirToAmount(double amount){
-        if(currentAmount < 0.0001){
+        if(this.amount < 0.0001){
             return 0;
         }
-        return getYDir() * amount/currentAmount;
+        return getYDir() * (amount / this.amount);
     }
 
     public double getVectorAmount(){
-        return currentAmount;
+        return amount;
     }
+
+    /**
+     * @return the direction (UP, DOWN, RIGHT, LEFT) which the vector is aligned to
+     */
+    public int toVectorDirection() {
+        if (Math.abs(xDir) > Math.abs(yDir)) {
+            if(xDir > 0){
+                return VECTOR_DIRECTION_RIGHT;
+            }
+            return VECTOR_DIRECTION_LEFT;
+        }
+        if(yDir > 0){
+            return VECTOR_DIRECTION_DOWN;
+        }
+        return VECTOR_DIRECTION_UP;
+    }
+
 }

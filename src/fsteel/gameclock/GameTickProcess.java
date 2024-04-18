@@ -15,9 +15,9 @@ public class GameTickProcess extends GameClockProcess{
     }
 
     @Override
-    protected void onTick(float lastTickRatio) {
+    protected void onTick(float lastTickDeviation) {
         for(TickAble ta : tickAbles){
-            ta.onTick(lastTickRatio);
+            ta.onTick(lastTickDeviation);
         }
     }
 

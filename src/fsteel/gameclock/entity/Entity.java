@@ -4,7 +4,6 @@ import fsteel.gameclock.entity.skin.Skin;
 import fsteel.main.Game;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class Entity implements ScreenObject{
 
@@ -13,12 +12,16 @@ public class Entity implements ScreenObject{
     private Skin skin;
 
     public Entity(){
-        xPos = 0;
-        yPos = 0;
-        setSkin(Skin.createBasicSkin(20,20));
+        this(0,0);
     }
 
-    public Entity(Skin skin){
+    public Entity(int xPos, int yPos){
+        this(Skin.createBasicSkin(20,20), xPos,yPos );
+    }
+
+    public Entity(Skin skin, double xPos, double yPos){
+        this.xPos = xPos;
+        this.yPos = yPos;
         setSkin(skin);
     }
 
@@ -30,7 +33,7 @@ public class Entity implements ScreenObject{
         Game.getRenderer().removeScreenObject(this);
     }
 
-    public void setPos(double xPos, double yPos){
+    public void setLocation(double xPos, double yPos){
         this.xPos = xPos;
         this.yPos = yPos;
     }
@@ -64,14 +67,6 @@ public class Entity implements ScreenObject{
 
     public Skin getSkin() {
         return skin;
-    }
-
-    public int getSimpleXSise(){
-        return skin.getAppearance().getWidth(null);
-    }
-
-    public int getSimpleYSise(){
-        return skin.getAppearance().getHeight(null);
     }
 
     public boolean isOnScreen(){

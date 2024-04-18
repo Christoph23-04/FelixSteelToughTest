@@ -1,19 +1,19 @@
 package fsteel.gameclock.entity.hitBox;
 
-import fsteel.gameclock.entity.ScreenPoint;
+import fsteel.gameclock.entity.ScreenPosition;
 import fsteel.gameclock.entity.Vector2D;
 
 import java.awt.*;
 
-public class HitBox implements ScreenPoint {
+public class HitBox implements ScreenPosition {
 
-    public static HitBox createSquareHitbox(int width, int height, HitBoxObject hbo) {
+    public static HitBox createSquareHitbox(int width, int height, ScreenPosition sp) {
         Point[] points = new Point[4];
         points[0] = new Point(0, 0);
         points[1] = new Point(width, 0);
         points[2] = new Point(width, height);
         points[3] = new Point(0, height);
-        return new HitBox(points, hbo);
+        return new HitBox(points, sp);
     }
 
     private Point centroid;
@@ -22,13 +22,12 @@ public class HitBox implements ScreenPoint {
     private int maxX;
     private int maxY;
     private Polygon bounds;
-    private HitBoxObject hboObject;
+    private ScreenPosition screenPosition;
 
-    public HitBox(Point[] boundPoints, HitBoxObject hitBoxObject) {
-        this.hboObject = hitBoxObject;
+    public HitBox(Point[] boundPoints, ScreenPosition screenPosition) {
+        this.screenPosition = screenPosition;
         setBounds(boundPoints);
     }
-
 
     public void setBounds(Point[] bounds) {
         Polygon p = new Polygon();
@@ -72,7 +71,6 @@ public class HitBox implements ScreenPoint {
                 maxX = xs;
             }
         }
-
         minY = bounds.ypoints[0];
         maxY = bounds.ypoints[0];
         for (int ys : bounds.ypoints) {
@@ -115,7 +113,11 @@ public class HitBox implements ScreenPoint {
         return bounds.contains(relXPos, relYPos);
     }
 
-    public boolean testPossibleHit(int xPosOnScreen, int yPosOnScreen){
+    /**
+     * This method is called to optimise the touch checking process.
+     * @return If this method returns false then it isn't possible, that the hit box was hit. If it returns true, then a precise calculation is provoked.
+     */
+    private boolean testPossibleHit(int xPosOnScreen, int yPosOnScreen){
         if( getMinXOnScreen() > xPosOnScreen ||
             getMinYOnScreen() > yPosOnScreen ||
             getMaxXOnScreen() < xPosOnScreen ||
@@ -125,7 +127,11 @@ public class HitBox implements ScreenPoint {
         return true;
     }
 
-    public boolean testPossibleHit(HitBox hb){
+    /**
+     * This method is called to optimise the touch checking process.
+     * @return If this method returns false then it isn't possible, that the hit box was hit. If it returns true, then a precise calculation is provoked.
+     */
+    private boolean testPossibleHit(HitBox hb){
         if( hb.getMinXOnScreen() > getMaxXOnScreen() ||
             hb.getMinYOnScreen() > getMaxYOnScreen() ||
             hb.getMaxXOnScreen() < getMinXOnScreen() ||
@@ -133,6 +139,24 @@ public class HitBox implements ScreenPoint {
             return false;
         }
         return true;
+    }
+
+    public Point[] getBounds() {
+        Point[] points = new Point[bounds.npoints];
+        for (int i = 0; i < points.length; i++) {
+            points[i] = new Point(bounds.xpoints[i], bounds.ypoints[i]);
+        }
+        return points;
+    }
+
+    @Override
+    public int getXPosOnScreen() {
+        return screenPosition.getXPosOnScreen();
+    }
+
+    @Override
+    public int getYPosOnScreen() {
+        return screenPosition.getYPosOnScreen();
     }
 
     public int getCentroidX() {
@@ -155,41 +179,23 @@ public class HitBox implements ScreenPoint {
         return bounds.npoints;
     }
 
-    public Point[] getBounds() {
-        Point[] points = new Point[bounds.npoints];
-        for (int i = 0; i < points.length; i++) {
-            points[i] = new Point(bounds.xpoints[i], bounds.ypoints[i]);
-        }
-        return points;
-    }
-
     public Rectangle getSimpleBounds() {
         return bounds.getBounds();
     }
 
-    public int getMinXOnScreen(){
-        return minX + hboObject.getXPosOnScreen();
-    }
-
     public int getMaxXOnScreen(){
-        return maxX + hboObject.getXPosOnScreen();
+        return maxX + screenPosition.getXPosOnScreen();
     }
-
-    public int getMinYOnScreen(){
-        return minY + hboObject.getYPosOnScreen();
+    public int getMinXOnScreen(){
+        return minX + screenPosition.getXPosOnScreen();
     }
 
     public int getMaxYOnScreen(){
-        return maxY + hboObject.getYPosOnScreen();
+        return maxY + screenPosition.getYPosOnScreen();
     }
 
-    @Override
-    public int getXPosOnScreen() {
-        return hboObject.getXPosOnScreen();
+    public int getMinYOnScreen(){
+        return minY + screenPosition.getYPosOnScreen();
     }
 
-    @Override
-    public int getYPosOnScreen() {
-        return hboObject.getYPosOnScreen();
-    }
 }

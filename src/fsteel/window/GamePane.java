@@ -1,11 +1,14 @@
 package fsteel.window;
 
 import fsteel.gameclock.entity.ScreenObject;
+import fsteel.gameclock.entity.hitBox.TouchCheckProcess;
 import fsteel.gameclock.rendering.GraphicRenderer;
 import fsteel.gameclock.rendering.RenderCanvas;
 import fsteel.gameclock.rendering.ScreenObjectRenderer;
+import fsteel.main.Game;
 import fsteel.main.GameSettings;
 import fsteel.userInputListening.GameMouseManager;
+import fsteel.window.border.WindowBorder;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;

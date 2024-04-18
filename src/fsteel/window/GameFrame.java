@@ -1,6 +1,7 @@
 package fsteel.window;
 
 import fsteel.gameclock.rendering.ScreenObjectRenderer;
+import fsteel.window.border.WindowBorder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +12,7 @@ public class GameFrame extends JFrame {
     private final JPanel backgroundPane;
     private final WindowStateManager stateManager;
     private final WindowActionManager actionManager;
+    private WindowBorder border;
 
     public GameFrame(ScreenObjectRenderer renderer){
         super("Felix tough as steel");
@@ -27,6 +29,7 @@ public class GameFrame extends JFrame {
         backgroundPane.setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, actionManager.getInputMap());
         backgroundPane.setActionMap(actionManager.getActionMap());
         gamePane.createBufferStrategy(GamePane.BUFFER_AMOUNT);
+        border = null;
     }
 
     public WindowActionManager getActionManager(){
@@ -35,6 +38,14 @@ public class GameFrame extends JFrame {
 
     public WindowStateManager getStateManager(){
         return stateManager;
+    }
+
+    public void setWindowBorder(WindowBorder wb){
+        this.border = wb;
+    }
+
+    public WindowBorder getWindowBorder(){
+        return border;
     }
 
     @Override
